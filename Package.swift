@@ -13,4 +13,3 @@ let package = Package(name: "BSON",
             dependencies: [.Target(name: "BSON")])
     ]
 )
-
