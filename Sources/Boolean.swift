@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Bool : BSONElementConvertible {
+extension Bool : BSONElement {
     /// .Boolean
     public var elementType: ElementType {
         return .Boolean
@@ -43,4 +43,8 @@ extension Bool : BSONElementConvertible {
     
     /// A bool is always 1 byte
     public static let bsonLength = BSONLength.Fixed(length: 1)
+    
+    public var bsonDescription: String {
+        return self ? "true" : "false"
+    }
 }

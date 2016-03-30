@@ -9,7 +9,7 @@
 import Foundation
 
 /// The BSON `NullValue`, as documented in the BSON spec.
-public struct Null : BSONElementConvertible {
+public struct Null : BSONElement {
     /// Create a new `Null` for storing in BSON.
     public init() {}
     
@@ -37,5 +37,9 @@ public struct Null : BSONElementConvertible {
     /// Always just returns Null().
     public static func instantiate(bsonData data: [UInt8]) throws -> Null {
         return Null()
+    }
+    
+    public var bsonDescription: String {
+        return "Null()"
     }
 }

@@ -12,11 +12,6 @@ import Foundation
     import Glibc
 #endif
 
-/// The base protocol that contains BSONElementConvertible.
-/// This is needed for BSONArrayConversionProtocol and BSONDictionaryConversionProtocol, because
-/// they shouldn't be BSONElementConvertible but should be usable in Document literals.
-public protocol AbstractBSONBase {}
-
 /// All BSON Element types
 public enum ElementType : UInt8 {
     /// This number repesents that the type is a Double
@@ -57,7 +52,7 @@ public enum ElementType : UInt8 {
 
 extension ElementType {
     /// The native swift type for the current type
-    var type: BSONElementConvertible.Type {
+    var type: BSONElement.Type {
         switch self {
         case .Double:
             return Swift.Double.self
@@ -103,8 +98,14 @@ public enum BSONLength {
     case NullTerminated
 }
 
+/// This protocol is used for printing the debugger description of a Document
+public protocol BSONDebugStringConvertible {
+    /// Return a representation of `self` that is (if possible) valid Swift code.
+    var bsonDescription: String { get }
+}
+
 /// Anything complying to the protocol is convertible from- and to BSON Binary
-public protocol BSONElementConvertible : AbstractBSONBase {
+public protocol BSONElement : BSONDebugStringConvertible {
     /// Identifies the BSON element type, such as `.String` (0x02)
     var elementType: ElementType { get }
     
@@ -121,4 +122,129 @@ public protocol BSONElementConvertible : AbstractBSONBase {
     
     /// The initializer expects the data for this element, starting AFTER the element type
     static func instantiate(bsonData data: [UInt8]) throws -> Self
+}
+
+public extension BSONElement {
+    /// Returns the value of `self` interpeted as an Int. Will return a value if `self` is of one of the following types:
+    /// Float, Double, Int16, Int32, Int64, Int
+    public var intValue: Int? {
+        typealias Beauty = Int
+        switch self {
+        case let me as Float: return Beauty(me)
+        case let me as Double: return Beauty(me)
+        case let me as Int16: return Beauty(me)
+        case let me as Int32: return Beauty(me)
+        case let me as Int64: return Beauty(me)
+        case let me as Int: return Beauty(me)
+        default: return nil
+        }
+    }
+    
+    /// Returns the value of `self` interpeted as an Int64. Will return a value if `self` is of one of the following types:
+    /// Float, Double, Int16, Int32, Int64, Int
+    public var int64Value: Int64? {
+        typealias Beauty = Int64
+        switch self {
+        case let me as Float: return Beauty(me)
+        case let me as Double: return Beauty(me)
+        case let me as Int16: return Beauty(me)
+        case let me as Int32: return Beauty(me)
+        case let me as Int64: return Beauty(me)
+        case let me as Int: return Beauty(me)
+        default: return nil
+        }
+    }
+    
+    /// Returns the value of `self` interpeted as an Int32. Will return a value if `self` is of one of the following types:
+    /// Float, Double, Int16, Int32, Int64, Int
+    public var int32Value: Int32? {
+        typealias Beauty = Int32
+        switch self {
+        case let me as Float: return Beauty(me)
+        case let me as Double: return Beauty(me)
+        case let me as Int16: return Beauty(me)
+        case let me as Int32: return Beauty(me)
+        case let me as Int64: return Beauty(me)
+        case let me as Int: return Beauty(me)
+        default: return nil
+        }
+    }
+    
+    /// Returns the value of `self` interpeted as a Double. Will return a value if `self` is of one of the following types:
+    /// Float, Double, Int16, Int32, Int64, Int
+    public var doubleValue: Double? {
+        typealias Beauty = Double
+        switch self {
+        case let me as Float: return Beauty(me)
+        case let me as Double: return Beauty(me)
+        case let me as Int16: return Beauty(me)
+        case let me as Int32: return Beauty(me)
+        case let me as Int64: return Beauty(me)
+        case let me as Int: return Beauty(me)
+        default: return nil
+        }
+    }
+    
+    /// Returns `self` if self is a `String`
+    public var stringValue: String? {
+        return self as? String
+    }
+    
+    /// Returns `self` if self is a `NSDate`
+    public var dateValue: NSDate? {
+        return self as? NSDate
+    }
+    
+    /// Returns `self` if self is a `RegularExpression`
+    public var regularExpressionValue: RegularExpression? {
+        return self as? RegularExpression
+    }
+    
+    /// Returns `self` if self is `JavaScriptCode`
+    public var javaScriptCodeValue: JavaScriptCode? {
+        return self as? JavaScriptCode
+    }
+    
+    /// Returns `self` if self is `Binary`
+    public var binaryValue: Binary? {
+        return self as? Binary
+    }
+    
+    /// Returns `self` if self is `ObjectId`
+    public var objectIdValue: ObjectId? {
+        return self as? ObjectId
+    }
+    
+    /// Returns `self` if self is `Timestamp`
+    public var timestampValue: Timestamp? {
+        return self as? Timestamp
+    }
+    
+    /// Returns `self` if self is `Null`
+    public var nullValue: Null? {
+        return self as? Null
+    }
+    
+    /// Returns `self` if self is `Document`
+    public var documentValue: Document? {
+        return self as? Document
+    }
+}
+
+public extension BSONElement {
+    public subscript(key: String) -> BSONElement? {
+        if let me = self as? Document {
+            return me[key]
+        } else {
+            return nil
+        }
+    }
+    
+    public subscript(key: Int) -> BSONElement? {
+        if let me = self as? Document {
+            return me[key]
+        } else {
+            return nil
+        }
+    }
 }

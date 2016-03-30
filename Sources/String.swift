@@ -1,7 +1,7 @@
 import Foundation
 
 /// The UTF8 BSON String type (0x02)
-extension String : BSONElementConvertible {
+extension String : BSONElement {
     /// .String
     public var elementType: ElementType {
         return .String
@@ -96,4 +96,9 @@ extension String : BSONElementConvertible {
     
     /// The length of a String is .Undefined
     public static let bsonLength = BSONLength.Undefined
+    
+    public var bsonDescription: String {
+        let escaped = self.stringByReplacingOccurrencesOfString("\"", withString: "\\\"")
+        return "\"\(escaped)\""
+    }
 }

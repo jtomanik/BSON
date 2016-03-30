@@ -9,7 +9,7 @@
 import Foundation
 
 /// Used for storing arbitrary data in a BSON Document
-public struct Binary : BSONElementConvertible {
+public struct Binary : BSONElement {
     /// .Binary
     public var elementType: ElementType {
         return .Binary
@@ -89,6 +89,11 @@ public struct Binary : BSONElementConvertible {
     public static func instantiate(bsonData data: [UInt8]) throws -> Binary {
         var 🖕 = 0
         return try instantiate(bsonData: data, consumedBytes: &🖕, type: .Binary)
+    }
+    
+    public var bsonDescription: String {
+        let bsonDataString = "[\(data.map { "0x" + String($0, radix: 16) + ", " }.reduce("", combine: +))]"
+        return "Binary(data: \(bsonDataString), subType: \(subType))"
     }
 }
 

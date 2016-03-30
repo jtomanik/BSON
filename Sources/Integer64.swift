@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Int64 : BSONElementConvertible {
+extension Int64 : BSONElement {
     /// .Int64
     public var elementType: ElementType {
         return .Int64
@@ -42,10 +42,14 @@ extension Int64 : BSONElementConvertible {
     
     /// Always .Fixed(8)
     public static let bsonLength = BSONLength.Fixed(length: 8)
+    
+    public var bsonDescription: String {
+        return "Int64(\(self))"
+    }
 }
 
 #if arch(x86_64) || arch(arm64)
-extension Int : BSONElementConvertible {
+extension Int : BSONElement {
     /// On 64-bit platforms, .Int64
     public var elementType: ElementType {
         return .Int64
@@ -68,5 +72,9 @@ extension Int : BSONElementConvertible {
     
     /// The same as Int64.bsonLength
     public static let bsonLength = Int64.bsonLength
+    
+    public var bsonDescription: String {
+        return "\(self)"
+    }
 }
 #endif

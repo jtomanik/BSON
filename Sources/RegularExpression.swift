@@ -19,7 +19,7 @@ public struct RegularExpression {
     }
 }
 
-extension RegularExpression : BSONElementConvertible {
+extension RegularExpression : BSONElement {
     /// .RegularExpression
     public var elementType: ElementType {
         return .RegularExpression
@@ -59,5 +59,9 @@ extension RegularExpression : BSONElementConvertible {
         consumedBytes = patternData.count+1 + optionsData.count+1
         
         return self.init(pattern: pattern, options: options)
+    }
+    
+    public var bsonDescription: String {
+        return "RegularExpression(pattern: \(pattern.bsonDescription), options: \(options.bsonDescription))"
     }
 }

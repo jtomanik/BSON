@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Int32 : BSONElementConvertible {
+extension Int32 : BSONElement {
     /// .Int32
     public var elementType: ElementType {
         return .Int32
@@ -42,4 +42,8 @@ extension Int32 : BSONElementConvertible {
     
     /// 4 bytes
     public static let bsonLength = BSONLength.Fixed(length: 4)
+    
+    public var bsonDescription: String {
+        return "Int32(\(self))"
+    }
 }

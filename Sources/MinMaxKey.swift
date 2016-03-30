@@ -9,7 +9,7 @@
 import Foundation
 
 /// Special type which compares lower than all other possible BSON element values.
-public struct MinKey : BSONElementConvertible {
+public struct MinKey : BSONElement {
     /// Create a new MinKey
     public init() {}
     
@@ -32,10 +32,14 @@ public struct MinKey : BSONElementConvertible {
     public static func instantiate(bsonData data: [UInt8]) throws -> MinKey {
         return MinKey()
     }
+    
+    public var bsonDescription: String {
+        return "MinKey()"
+    }
 }
 
 /// Special type which compares higher than all other possible BSON element values.
-public struct MaxKey : BSONElementConvertible {
+public struct MaxKey : BSONElement {
     /// Create a new MaxKey
     public init() {}
     
@@ -57,5 +61,9 @@ public struct MaxKey : BSONElementConvertible {
     /// Always returns MaxKey()
     public static func instantiate(bsonData data: [UInt8]) throws -> MaxKey {
         return MaxKey()
+    }
+    
+    public var bsonDescription: String {
+        return "MaxKey()"
     }
 }

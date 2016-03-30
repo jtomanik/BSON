@@ -27,7 +27,7 @@ import Foundation
 /// Because this BSON library exports all documents alphabetically, every document only numerical subsequential keys starting at '0' will be treated as an array.
 public struct Document {
     /// Element storage
-    internal var elements = [String : BSONElementConvertible]()
+    internal var elements = [String : BSONElement]()
     
     /// Initialize a BSON document with the data from the given Foundation `NSData` object.
     /// 
@@ -171,6 +171,12 @@ extension Document {
 extension Document : CustomStringConvertible {
     /// Returns the description of all elements in this document. Not ordered correctly.
     public var description: String {
-        return elements.description
+        return self.bsonDescription
+    }
+}
+
+extension Document : CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return self.bsonDescription
     }
 }

@@ -1,7 +1,7 @@
 import Foundation
 
 /// The 64-bit Double (0x01) BSON-type
-extension Double : BSONElementConvertible {
+extension Double : BSONElement {
     /// .Double
     public var elementType: ElementType {
         return .Double
@@ -35,4 +35,8 @@ extension Double : BSONElementConvertible {
     
     /// .Fixed(length: 8)
     public static let bsonLength = BSONLength.Fixed(length: 8)
+    
+    public var bsonDescription: String {
+        return "\(self)"
+    }
 }

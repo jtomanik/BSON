@@ -25,7 +25,7 @@ public struct JavaScriptCode {
     }
 }
 
-extension JavaScriptCode : BSONElementConvertible {
+extension JavaScriptCode : BSONElement {
     /// The ElementType of JavaScriptCode is .JavaScriptCode when it does not define scope or .JavascriptCodeWithScope when it does.
     public var elementType: ElementType {
         return scope == nil ? .JavaScriptCode : .JavascriptCodeWithScope
@@ -95,6 +95,14 @@ extension JavaScriptCode : BSONElementConvertible {
             return self.init(code: code, scope: scope)
         default:
             throw DeserializationError.InvalidOperation
+        }
+    }
+    
+    public var bsonDescription: String {
+        if let scope = scope {
+            return "JavaScriptCode(code: \(code.bsonDescription), scope: \(scope.bsonDescription))"
+        } else {
+            return "JavaScriptCode(code: \(code.bsonDescription))"
         }
     }
 }
