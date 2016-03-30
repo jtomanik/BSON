@@ -185,6 +185,11 @@ public extension BSONElement {
         }
     }
     
+    /// Returns `self` if self is a `Bool`
+    public var boolValue: Bool? {
+        return self as? Bool
+    }
+    
     /// Returns `self` if self is a `String`
     public var stringValue: String? {
         return self as? String
@@ -246,5 +251,30 @@ public extension BSONElement {
         } else {
             return nil
         }
+    }
+}
+
+// TODO: Add more data types to compare here
+infix operator ?== {}
+
+public func ?==(left: BSONElement?, right: BSONElement?) -> Bool {
+    switch (left, right) {
+    case (.None, .None):
+        return true
+    case (.Some(let left), .Some(let right)):
+        switch (left.elementType, right.elementType) {
+        case (.Double, .Double):
+            return left.doubleValue == right.doubleValue
+        case (.String, .String):
+            return left.stringValue == right.stringValue
+        case (.Int32, .Int32), (.Int64, .Int64):
+            return left.int64Value == right.int64Value
+        case (.Boolean, .Boolean):
+            return left.boolValue == right.boolValue
+        default:
+            return false
+        }
+    default:
+        return false
     }
 }
